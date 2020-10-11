@@ -5,15 +5,21 @@ const Header = ({ course }) => (
     <h1>{ course }</h1>
 );
 
+const Part = ({ data }) => {
+    const { part, exercise } = data;
+    return (
+        <p>{ part } { exercise }</p>
+    );
+};
+
 const Content = ({ data }) => {
     const [first, second, third] = data;
-    console.log(first, second, third);
     return (
-        <>
-            <p>{ first.part } { first.exercise }</p>
-            <p>{ second.part } { second.exercise }</p>
-            <p>{ third.part } { third.exercise }</p>
-        </>
+        <div>
+            <Part data={ first }/>
+            <Part data={ second }/>
+            <Part data={ third }/>
+        </div>
     );
 }
 
