@@ -5,8 +5,6 @@ const Header = ({ title }) => <h1>{ title }</h1>;
 
 const Button = ({ text, clickHandler }) => <button onClick={clickHandler}>{ text }</button>;
 
-const Display = ({ text, value }) => <p>{ text } { value }</p>
-
 const Statistics = ({ good, neutral, bad }) => {
     const goodScore = 1;
     const neutralScore = 0;
@@ -27,17 +25,19 @@ const Statistics = ({ good, neutral, bad }) => {
     } else {
         return (
             <div>
-            <Header title="statistics"/>
-            <Display text="good" value={good}/>
-            <Display text="neutral" value={neutral}/>
-            <Display text="bad" value={bad}/>
-            <Display text="all" value={good + neutral + bad}/>
-            <Display text="average" value={avgScore()}/>
-            <Display text="positive" value={positivePercentage()}/>
+                <Header title="statistics"/>
+                <Statistic text="good" value={good}/>
+                <Statistic text="neutral" value={neutral}/>
+                <Statistic text="bad" value={bad}/>
+                <Statistic text="all" value={good + neutral + bad}/>
+                <Statistic text="average" value={avgScore()}/>
+                <Statistic text="positive" value={positivePercentage()}/>
             </div>
         );
     }
 };
+
+const Statistic = ({ text, value }) => <p>{ text } { value }</p>
 
 const App = () => {
     const [good, setGood] = useState(0);
