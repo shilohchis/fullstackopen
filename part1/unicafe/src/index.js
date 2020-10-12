@@ -26,18 +26,27 @@ const Statistics = ({ good, neutral, bad }) => {
         return (
             <div>
                 <Header title="statistics"/>
-                <Statistic text="good" value={good}/>
-                <Statistic text="neutral" value={neutral}/>
-                <Statistic text="bad" value={bad}/>
-                <Statistic text="all" value={good + neutral + bad}/>
-                <Statistic text="average" value={avgScore()}/>
-                <Statistic text="positive" value={positivePercentage()}/>
+                <table>
+                    <tbody>
+                        <Statistic text="good" value={good}/>
+                        <Statistic text="neutral" value={neutral}/>
+                        <Statistic text="bad" value={bad}/>
+                        <Statistic text="all" value={good + neutral + bad}/>
+                        <Statistic text="average" value={avgScore()}/>
+                        <Statistic text="positive" value={positivePercentage()}/>
+                    </tbody>
+                </table>
             </div>
         );
     }
 };
 
-const Statistic = ({ text, value }) => <p>{ text } { value }</p>
+const Statistic = ({ text, value }) => (
+    <tr>
+        <td>{ text }</td>
+        <td>{ value }</td>
+    </tr>
+);
 
 const App = () => {
     const [good, setGood] = useState(0);
