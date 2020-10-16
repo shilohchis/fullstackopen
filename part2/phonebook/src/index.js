@@ -8,15 +8,18 @@ const App = () => {
         { name: 'Arto Hellas', id: counter }
     ]);
 
-    const changeInputName = (e) => {
-        setNewName(e.target.value);
-    };
+    const changeInputName = e => setNewName(e.target.value);
 
-    const addName = (e) => {
+    const addName = e => {
         e.preventDefault();
-        setPersons([ ...persons, { name: newName, id: counter + 1 } ]);
-        setCounter(counter + 1);
-        setNewName('');
+        const find = persons.find( obj => obj.name === newName );
+        if(!find) {
+            setPersons([ ...persons, { name: newName, id: counter + 1 } ]);
+            setCounter(counter + 1);
+            setNewName('');
+        } else {
+            alert(`${newName} is already added to phonebook`);
+        }
     };
 
     return (
