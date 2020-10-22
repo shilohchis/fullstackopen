@@ -81,7 +81,7 @@ const App = () => {
             <HeaderType number={2} text="add a new"/>
             <FormBasic data={dataForm}/>
             <HeaderType number={2} text="Numbers"/>
-            <FlatList datas={showAll ? persons : filteredPersons} showKeys={['name', 'phone']}/>
+            <FlatList datas={ showAll ? persons : filteredPersons } showKeys={['name', 'phone']}/>
         </div>
     );
 };
