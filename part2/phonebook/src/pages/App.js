@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormBasic from '../sections/FormBasic';
 import Search from '../sections/Search';
 import FlatList from '../components/FlatList';
 import HeaderType from '../components/HeaderType';
 import _ from 'lodash';
+import axios from 'axios';
 
 const App = () => {
     const [ showAll, setShowAll ] = useState(true);
@@ -11,12 +12,7 @@ const App = () => {
     const [ newName, setNewName ] = useState('');
     const [ newPhone, setNewPhone ] = useState('');
     const [ counter, setCounter ] = useState(1);
-    const [ persons, setPersons ] = useState([
-        { id:1, name: 'Arto Hellas', phone: '040-123456' },
-        { id:2, name: 'Ada Lovelace', phone: '39-44-5323523' },
-        { id:3, name: 'Dan Abramov', phone: '12-43-234345' },
-        { id:4, name: 'Mary Poppendieck', phone: '39-23-6423122' }
-    ]);
+    const [ persons, setPersons ] = useState([]);
     const [filteredPersons, setFilteredPersons] = useState([]);
 
     const changeInputVal = ({ target: { value } }, type = null) => {
@@ -74,6 +70,13 @@ const App = () => {
         }
     };
 
+    useEffect(() => {
+        axios.get('http://localhost:3001/persons')
+            .then( ({ data }) => {
+                setPersons(persons.concat(data))
+            });
+    }, []);
+
     return (
         <div>
             <HeaderType number={2} text="Phonebook"/>
@@ -81,7 +84,7 @@ const App = () => {
             <HeaderType number={2} text="add a new"/>
             <FormBasic data={dataForm}/>
             <HeaderType number={2} text="Numbers"/>
-            <FlatList datas={ showAll ? persons : filteredPersons } showKeys={['name', 'phone']}/>
+            <FlatList datas={ showAll ? persons : filteredPersons } showKeys={['name', 'number']}/>
         </div>
     );
 };
