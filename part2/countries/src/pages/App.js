@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import InputText from '../components/InputText';
 import Country from '../components/Country';
 import CountryDetail from '../components/CountryDetail';
-import axios from 'axios';
+import { getCountries } from '../services/api';
 
 const App = () => {
     const [countries, setCountries] = useState([]);
@@ -20,21 +20,28 @@ const App = () => {
         setFilteredCountry(newData);
     };
 
+    const toggleCountryShow = (newIdx) => {
+        console.log(newIdx);
+        setShowIndex(newIdx === showIndex ? '' : newIdx);
+    };
+
     const showResult = () => {
         let res;
         if(filteredCountry.length > 1) {
-            res = filteredCountry.map(country => <Country key={country.alpha2Code} show={showIndex} text={country.name} typeButton="button" data={country} onShow={setShowIndex}/>);
+            res = filteredCountry.map(country => <Country key={country.alpha2Code} show={showIndex} text={country.name} typeButton="button" data={country} onShow={toggleCountryShow}/>);
         } else if(filteredCountry.length === 1) {
-            res = <CountryDetail data={ filteredCountry[0] }/>;
+            res = <CountryDetail data={ filteredCountry[0] } isSingle={true}/>;
         }
         return res;
     };
 
+    const fetchCountries = async() => {
+        const { data } = await getCountries();
+        setCountries( countries.concat(data) )
+    };
+
     useEffect(() => {
-        axios.get('https://restcountries.eu/rest/v2/all')
-            .then( ({ data }) => {
-                setCountries( countries.concat(data) )
-            });
+        fetchCountries();
     }, []);
 
     return (
