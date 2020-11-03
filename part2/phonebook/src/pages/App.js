@@ -3,6 +3,7 @@ import FormBasic from '../sections/FormBasic';
 import Search from '../sections/Search';
 import FlatList from '../components/FlatList';
 import HeaderType from '../components/HeaderType';
+import FlashCard from '../components/FlashCard';
 import _ from 'lodash';
 import phonebook from '../services/phonebook';
 
@@ -13,6 +14,13 @@ const App = () => {
     const [ newPhone, setNewPhone ] = useState('');
     const [ persons, setPersons ] = useState([]);
     const [filteredPersons, setFilteredPersons] = useState([]);
+    const [notif, setNotif] = useState(null);
+
+    const resetNotif = () => {
+        setTimeout(() => {
+            setNotif(null);
+        }, 3000);
+    };
 
     const changeInputVal = ({ target: { value } }, type = null) => {
         switch (type) {
@@ -38,6 +46,8 @@ const App = () => {
                 .then(resp => {
                     phonebook.list()
                     setPersons([ ...persons, resp ]);
+                    setNotif(`Added ${newName}`);
+                    resetNotif();
                 });
             resetInput();
         } else {
@@ -47,6 +57,8 @@ const App = () => {
                 phonebook.update(req, find.id)
                     .then(resp => {
                         setPersons( persons.map(item => find.id == item.id ? resp : item) );
+                        setNotif(`Updated ${newName}`);
+                        resetNotif();
                     });
             }
         }
@@ -95,6 +107,7 @@ const App = () => {
     return (
         <div>
             <HeaderType number={2} text="Phonebook"/>
+            <FlashCard text={notif}/>
             <Search value={search} changeValue={filterData}/>
             <HeaderType number={2} text="add a new"/>
             <FormBasic data={dataForm}/>

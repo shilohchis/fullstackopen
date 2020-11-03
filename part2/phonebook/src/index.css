@@ -1,0 +1,11 @@
+.flash-success {
+    border: solid 5px green;
+    font-size: 20px;
+    background: lightgrey;
+    color: green;
+    padding: 10px;
+}
+
+.hide {
+    display: none;
+}
