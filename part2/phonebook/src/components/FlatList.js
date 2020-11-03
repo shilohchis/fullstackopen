@@ -10,8 +10,8 @@ const FlatList = ({ datas, showKeys, onDelete }) => {
         {
             datas.map(data => {
                 return (
-                    <div>
-                        <span key={showKeys.map( key => `${data[key]}` )}>{ showKeys.map(keyObj => `${data[keyObj]} `) }</span>
+                    <div key={showKeys.map( key => `${data[key]}` )}>
+                        <span>{ showKeys.map(keyObj => `${data[keyObj]} `) }</span>
                         <button onClick={() => confirmDelete(data.id)}>delete</button>
                     </div>
                 )

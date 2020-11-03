@@ -23,8 +23,16 @@ const del = id => {
     });
 };
 
+const update = (obj, id) => {
+    const req = axios.put(`${url}/${id}`, obj);
+    return req.then(resp => {
+        return resp.data;
+    });
+};
+
 export default {
     add,
     list,
-    del
+    del,
+    update
 }

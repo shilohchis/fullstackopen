@@ -31,16 +31,24 @@ const App = () => {
 
     const addNewData = e => {
         e.preventDefault();
-        const find = persons.find( obj => obj.name.toLowerCase() === newName.toLowerCase() || obj.phone === newPhone );
+        const find = persons.find( obj => obj.name.toLowerCase() === newName.toLowerCase() || obj.number === newPhone );
+        const req = { name: newName, number: newPhone };
         if(!find) {
-            phonebook.add({ name: newName, number: newPhone })
-                .then(resp => phonebook.list())
-                .then(list => {
-                    setPersons(list);
+            phonebook.add(req)
+                .then(resp => {
+                    phonebook.list()
+                    setPersons([ ...persons, resp ]);
                 });
             resetInput();
         } else {
-            alert(`${newName.toLowerCase() === find.name.toLowerCase() ? newName : newPhone} is already added to phonebook`);
+            const type = newName ? 'name' : 'phone';
+            const resp = window.confirm(`${newName.toLowerCase() === find.name.toLowerCase() ? newName : newPhone} is already added to phonebook, replace the old ${type} with a new one?`);
+            if(resp) {
+                phonebook.update(req, find.id)
+                    .then(resp => {
+                        setPersons( persons.map(item => find.id == item.id ? resp : item) );
+                    });
+            }
         }
     };
 
