@@ -4,14 +4,13 @@ import Search from '../sections/Search';
 import FlatList from '../components/FlatList';
 import HeaderType from '../components/HeaderType';
 import _ from 'lodash';
-import axios from 'axios';
+import phonebook from '../services/phonebook';
 
 const App = () => {
     const [ showAll, setShowAll ] = useState(true);
     const [ search, setSearch ] = useState('');
     const [ newName, setNewName ] = useState('');
     const [ newPhone, setNewPhone ] = useState('');
-    const [ counter, setCounter ] = useState(1);
     const [ persons, setPersons ] = useState([]);
     const [filteredPersons, setFilteredPersons] = useState([]);
 
@@ -34,8 +33,11 @@ const App = () => {
         e.preventDefault();
         const find = persons.find( obj => obj.name.toLowerCase() === newName.toLowerCase() || obj.phone === newPhone );
         if(!find) {
-            setPersons([ ...persons, { name: newName, phone: newPhone, id: counter + 1 } ]);
-            setCounter(counter + 1);
+            phonebook.add({ name: newName, number: newPhone })
+                .then(resp => phonebook.list())
+                .then(list => {
+                    setPersons(list);
+                });
             resetInput();
         } else {
             alert(`${newName.toLowerCase() === find.name.toLowerCase() ? newName : newPhone} is already added to phonebook`);
@@ -71,10 +73,8 @@ const App = () => {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:3001/persons')
-            .then( ({ data }) => {
-                setPersons(persons.concat(data))
-            });
+        phonebook.list()
+        .then(resp => setPersons(persons.concat( resp )));
     }, []);
 
     return (
