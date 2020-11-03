@@ -1,9 +1,10 @@
 import React from 'react';
 import '../index.css';
 
-const FlashCard = ({ text }) => {
+const FlashCard = ({ notification }) => {
+    const { text, type } = notification;
     return (
-        <div className={ text ? 'flash-success' : 'hide' }>
+        <div className={ !text ? 'hide' : `flash flash-${type}` }>
             <p>{text}</p>
         </div>
     );

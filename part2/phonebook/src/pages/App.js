@@ -8,17 +8,21 @@ import _ from 'lodash';
 import phonebook from '../services/phonebook';
 
 const App = () => {
+    const defaultNotif = {
+        type: '',
+        text: ''
+    };
     const [ showAll, setShowAll ] = useState(true);
     const [ search, setSearch ] = useState('');
     const [ newName, setNewName ] = useState('');
     const [ newPhone, setNewPhone ] = useState('');
     const [ persons, setPersons ] = useState([]);
     const [filteredPersons, setFilteredPersons] = useState([]);
-    const [notif, setNotif] = useState(null);
+    const [notif, setNotif] = useState(defaultNotif);
 
     const resetNotif = () => {
         setTimeout(() => {
-            setNotif(null);
+            setNotif(defaultNotif);
         }, 3000);
     };
 
@@ -46,7 +50,10 @@ const App = () => {
                 .then(resp => {
                     phonebook.list()
                     setPersons([ ...persons, resp ]);
-                    setNotif(`Added ${newName}`);
+                    setNotif({
+                        type: 'success',
+                        text: `Added ${newName}`
+                    });
                     resetNotif();
                 });
             resetInput();
@@ -57,7 +64,10 @@ const App = () => {
                 phonebook.update(req, find.id)
                     .then(resp => {
                         setPersons( persons.map(item => find.id == item.id ? resp : item) );
-                        setNotif(`Updated ${newName}`);
+                        setNotif({
+                            type: 'success',
+                            text: `Updated ${newName}`
+                        });
                         resetNotif();
                     });
             }
@@ -93,9 +103,17 @@ const App = () => {
     };
 
     const delRow = id => {
+        const obj = persons.find(obj => obj.id == id);
         phonebook.del(id)
             .then(resp => {
                 setPersons( persons.filter(obj => obj.id != id) );
+            })
+            .catch(err => {
+                setNotif({
+                    type: 'error',
+                    text: `Information of ${obj.name} has already been removed from server`
+                });
+                resetNotif();
             });
     };
 
@@ -107,7 +125,7 @@ const App = () => {
     return (
         <div>
             <HeaderType number={2} text="Phonebook"/>
-            <FlashCard text={notif}/>
+            <FlashCard notification={notif}/>
             <Search value={search} changeValue={filterData}/>
             <HeaderType number={2} text="add a new"/>
             <FormBasic data={dataForm}/>
