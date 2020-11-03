@@ -52,7 +52,7 @@ const App = () => {
         ]
     };
 
-    const filterData = (newSearch) => {
+    const filterData = newSearch => {
         setSearch(newSearch);
         if(newSearch.length > 0) {
             let filteredData = _.filter(persons, (val, idx) => {
@@ -72,9 +72,16 @@ const App = () => {
         }
     };
 
+    const delRow = id => {
+        phonebook.del(id)
+            .then(resp => {
+                setPersons( persons.filter(obj => obj.id != id) );
+            });
+    };
+
     useEffect(() => {
         phonebook.list()
-        .then(resp => setPersons(persons.concat( resp )));
+            .then(resp => setPersons(persons.concat( resp )));
     }, []);
 
     return (
@@ -84,7 +91,7 @@ const App = () => {
             <HeaderType number={2} text="add a new"/>
             <FormBasic data={dataForm}/>
             <HeaderType number={2} text="Numbers"/>
-            <FlatList datas={ showAll ? persons : filteredPersons } showKeys={['name', 'number']}/>
+            <FlatList datas={ showAll ? persons : filteredPersons } showKeys={['name', 'number']} onDelete={delRow}/>
         </div>
     );
 };

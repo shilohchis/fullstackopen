@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const url = 'http://localhost:3001/persons';
+
 const add = (obj) => {
     const req = axios.post(url, obj);
     return req.then(resp => {
@@ -15,7 +16,15 @@ const list = () => {
     });
 };
 
+const del = id => {
+    const req = axios.delete(`${url}/${id}`);
+    return req.then(resp => {
+        return resp.data;
+    });
+};
+
 export default {
     add,
-    list
+    list,
+    del
 }
