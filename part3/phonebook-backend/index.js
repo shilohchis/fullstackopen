@@ -17,11 +17,15 @@ const unknownEndpoint = (req, resp) => {
         error: 'unknown endpoint'
     });
 };
+
+morgan.token('resp-body', (req, resp) => {
+    return JSON.stringify(req.body);
+});
 // ------------ MIDDLEWARE ------------
 
 app.use( express.json() );
 app.use(requestLogger);
-app.use( morgan('tiny') );
+app.use( morgan(':method :url :status :res[content-length] - :response-time ms :resp-body') );
 
 let books = [
     {
