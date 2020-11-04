@@ -64,6 +64,12 @@ app.post('/api/persons', (req, resp) => {
             error: `${col} missing`
         });
     }
+    const book = books.find(book => book.name.toLowerCase() === name.toLowerCase());
+    if(book) {
+        return resp.status(409).json({
+            error: 'Duplicate name'
+        });
+    }
     books = books.concat({
         id: generateId(),
         name,
