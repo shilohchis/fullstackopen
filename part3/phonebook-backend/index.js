@@ -25,6 +25,10 @@ let books = [
     }
 ];
 
+const generateId = () => {
+    return Math.ceil(Math.random() * 100000);
+};
+
 app.get('/', (req, resp) => {
 
 });
@@ -45,6 +49,28 @@ app.delete('/api/persons/:id', (req, resp) => {
     books = books.filter(book => book.id !== Number(req.params.id));
     console.log(books);
     return resp.status(204).end();
+});
+
+app.post('/api/persons', (req, resp) => {
+    const { name, number } = req.body;
+    let col;
+    if(!name && !number) {
+        col = 'Name and number';
+    } else {
+        col = !name ? 'Name' : !number ? 'Number' : null;
+    }
+    if(col) {
+        return resp.status(409).json({
+            error: `${col} missing`
+        });
+    }
+    books = books.concat({
+        id: generateId(),
+        name,
+        number
+    });
+    console.log(books);
+    return resp.status(201).end();
 });
 
 app.get('/info', (req, resp) => {
