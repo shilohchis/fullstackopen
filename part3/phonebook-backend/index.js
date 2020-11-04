@@ -1,6 +1,27 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
+
+// ------------ MIDDLEWARE ------------
+const requestLogger = (req, resp, next) => {
+    const { method, path, body } = req;
+    console.log('Method:', method);
+    console.log('Path:', path);
+    console.log('Body:', body);
+    console.log('--------');
+    next();
+};
+
+const unknownEndpoint = (req, resp) => {
+    resp.status(404).json({
+        error: 'unknown endpoint'
+    });
+};
+// ------------ MIDDLEWARE ------------
+
 app.use( express.json() );
+app.use(requestLogger);
+app.use( morgan('tiny') );
 
 let books = [
     {
@@ -85,6 +106,8 @@ app.get('/info', (req, resp) => {
         <p>${new Date()}</p>
     `);
 });
+
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
