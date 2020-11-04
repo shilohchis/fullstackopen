@@ -41,6 +41,12 @@ app.get('/api/persons/:id', (req, resp) => {
     return resp.status(404).end();
 });
 
+app.delete('/api/persons/:id', (req, resp) => {
+    books = books.filter(book => book.id !== Number(req.params.id));
+    console.log(books);
+    return resp.status(204).end();
+});
+
 app.get('/info', (req, resp) => {
     return resp.send(`
         <p>Phonebook has info for ${books.length} people</p>
