@@ -49,7 +49,7 @@ const App = () => {
             phonebook.add(req)
                 .then(resp => {
                     phonebook.list()
-                    setPersons([ ...persons, resp ]);
+                    fetchList();
                     setNotif({
                         type: 'success',
                         text: `Added ${newName}`
@@ -117,9 +117,13 @@ const App = () => {
             });
     };
 
-    useEffect(() => {
+    const fetchList = () => {
         phonebook.list()
-            .then(resp => setPersons(persons.concat( resp )));
+            .then(resp => setPersons(resp));
+    };
+
+    useEffect(() => {
+        fetchList();
     }, []);
 
     return (
