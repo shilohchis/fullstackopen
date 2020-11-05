@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
-
+const cors = require('cors');
 // ------------ MIDDLEWARE ------------
 const requestLogger = (req, resp, next) => {
     const { method, path, body } = req;
@@ -22,10 +22,11 @@ morgan.token('resp-body', (req, resp) => {
     return JSON.stringify(req.body);
 });
 // ------------ MIDDLEWARE ------------
-
-app.use( express.json() );
 app.use(requestLogger);
+app.use( cors() );
+app.use( express.json() );
 app.use( morgan(':method :url :status :res[content-length] - :response-time ms :resp-body') );
+app.use( express.static('build') );
 
 let books = [
     {
@@ -113,7 +114,7 @@ app.get('/info', (req, resp) => {
 
 app.use(unknownEndpoint);
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
