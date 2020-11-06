@@ -56,30 +56,33 @@ app.delete('/api/persons/:id', (req, resp) => {
 
 app.post('/api/persons', (req, resp) => {
     const { name, number } = req.body;
-    let col;
-    if(!name && !number) {
-        col = 'Name and number';
-    } else {
-        col = !name ? 'Name' : !number ? 'Number' : null;
-    }
-    if(col) {
-        return resp.status(409).json({
-            error: `${col} missing`
-        });
-    }
-    const book = books.find(book => book.name.toLowerCase() === name.toLowerCase());
-    if(book) {
-        return resp.status(409).json({
-            error: 'Duplicate name'
-        });
-    }
-    books = books.concat({
-        id: generateId(),
+    // let col;
+    // if(!name && !number) {
+    //     col = 'Name and number';
+    // } else {
+    //     col = !name ? 'Name' : !number ? 'Number' : null;
+    // }
+    // if(col) {
+    //     return resp.status(409).json({
+    //         error: `${col} missing`
+    //     });
+    // }
+    // const book = books.find(book => book.name.toLowerCase() === name.toLowerCase());
+    // if(book) {
+    //     return resp.status(409).json({
+    //         error: 'Duplicate name'
+    //     });
+    // }
+    const book = new Phone({
         name,
-        number
+        number,
+        date: new Date()
     });
-    console.log(books);
-    return resp.status(201).end();
+    book.save()
+        .then(res => {
+            console.log(res);
+            resp.json(res);
+    });
 });
 
 app.get('/info', (req, resp) => {
