@@ -93,11 +93,26 @@ app.post('/api/persons', (req, resp) => {
     });
 });
 
+app.put('/api/persons/:id', (req, resp) => {
+    const { name, number } = req.body;
+    const phone = {
+        name,
+        number
+    };
+    Phone.findByIdAndUpdate(req.params.id, phone, { new: true })
+        .then(result => resp.json(result))
+        .catch(err => next(err));
+});
+
 app.get('/info', (req, resp) => {
-    return resp.send(`
-        <p>Phonebook has info for ${books.length} people</p>
-        <p>${new Date()}</p>
-    `);
+    Phone.find({})
+        .then(result => {
+            return resp.send(`
+                <p>Phonebook has info for ${result.length} people</p>
+                <p>${new Date()}</p>
+                `);
+        })
+        .catch(err => next(err));
 });
 
 app.use(errorHandler);

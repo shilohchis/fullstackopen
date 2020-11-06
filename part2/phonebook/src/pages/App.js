@@ -63,6 +63,7 @@ const App = () => {
             if(resp) {
                 phonebook.update(req, find.id)
                     .then(resp => {
+                        console.log(resp);
                         setPersons( persons.map(item => find.id == item.id ? resp : item) );
                         setNotif({
                             type: 'success',
