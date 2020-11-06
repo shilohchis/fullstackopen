@@ -1,7 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const cors = require('cors');
+const Phone = require('./models/phone');
+
 // ------------ MIDDLEWARE ------------
 const requestLogger = (req, resp, next) => {
     const { method, path, body } = req;
@@ -28,47 +31,21 @@ app.use( express.json() );
 app.use( morgan(':method :url :status :res[content-length] - :response-time ms :resp-body') );
 app.use( express.static('build') );
 
-let books = [
-    {
-        "name": "Arto Hellas",
-        "number": "040-123456",
-        "id": 1
-    },
-    {
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523",
-        "id": 2
-    },
-    {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": 3
-    },
-    {
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122",
-        "id": 4
-    }
-];
-
-const generateId = () => {
-    return Math.ceil(Math.random() * 100000);
-};
-
 app.get('/', (req, resp) => {
-
+    response.send('<h1>Hello World!</h1>');
 });
 
 app.get('/api/persons', (req, resp) => {
-    return resp.status(200).json(books);
+    Phone.find({}).then(res => {
+        resp.json(res);
+    });
 });
 
 app.get('/api/persons/:id', (req, resp) => {
-    const person = books.find(book => book.id === Number(req.params.id));
-    if(person) {
-        return resp.status(200).json(person);
-    }
-    return resp.status(404).end();
+    Phone.findById(req.params.id)
+        .then(res => {
+            return resp.json(res);
+    });
 });
 
 app.delete('/api/persons/:id', (req, resp) => {
