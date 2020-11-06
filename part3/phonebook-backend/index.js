@@ -21,6 +21,14 @@ const unknownEndpoint = (req, resp) => {
     });
 };
 
+const errorHandler = (err, request, response, next) => {
+    console.log(err.message);
+    if(err.name == 'CastError') {
+        response.status(400).send({ error: 'malformatted id' });
+    }
+    next(err);
+};
+
 morgan.token('resp-body', (req, resp) => {
     return JSON.stringify(req.body);
 });
@@ -49,9 +57,9 @@ app.get('/api/persons/:id', (req, resp) => {
 });
 
 app.delete('/api/persons/:id', (req, resp) => {
-    books = books.filter(book => book.id !== Number(req.params.id));
-    console.log(books);
-    return resp.status(204).end();
+    Phone.findByIdAndRemove(req.params.id)
+        .then(result => resp.status(204).end())
+        .catch(err => next(err));
 });
 
 app.post('/api/persons', (req, resp) => {
@@ -92,6 +100,7 @@ app.get('/info', (req, resp) => {
     `);
 });
 
+app.use(errorHandler);
 app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3001;
