@@ -25,6 +25,8 @@ const errorHandler = (err, request, response, next) => {
     console.log(err.message);
     if(err.name == 'CastError') {
         response.status(400).send({ error: 'malformatted id' });
+    } else if(err.name == 'ValidationError') {
+        response.status(400).send({ error: err.message });
     }
     next(err);
 };
@@ -62,35 +64,16 @@ app.delete('/api/persons/:id', (req, resp) => {
         .catch(err => next(err));
 });
 
-app.post('/api/persons', (req, resp) => {
+app.post('/api/persons', (req, resp, next) => {
     const { name, number } = req.body;
-    // let col;
-    // if(!name && !number) {
-    //     col = 'Name and number';
-    // } else {
-    //     col = !name ? 'Name' : !number ? 'Number' : null;
-    // }
-    // if(col) {
-    //     return resp.status(409).json({
-    //         error: `${col} missing`
-    //     });
-    // }
-    // const book = books.find(book => book.name.toLowerCase() === name.toLowerCase());
-    // if(book) {
-    //     return resp.status(409).json({
-    //         error: 'Duplicate name'
-    //     });
-    // }
     const book = new Phone({
         name,
         number,
         date: new Date()
     });
     book.save()
-        .then(res => {
-            console.log(res);
-            resp.json(res);
-    });
+        .then(res => resp.json( res.toJSON() ))
+        .catch(err => next(err));
 });
 
 app.put('/api/persons/:id', (req, resp) => {
