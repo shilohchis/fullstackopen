@@ -55,6 +55,13 @@ const App = () => {
                         text: `Added ${newName}`
                     });
                     resetNotif();
+                }).catch(err => {
+                    console.log(err.response.data);
+                    setNotif({
+                        type: 'error',
+                        text: err.response.data.error
+                    });
+                    resetNotif();
                 });
             resetInput();
         } else {
@@ -68,6 +75,14 @@ const App = () => {
                         setNotif({
                             type: 'success',
                             text: `Updated ${newName}`
+                        });
+                        resetNotif();
+                    })
+                    .catch(err => {
+                        console.log(err.response.data);
+                        setNotif({
+                            type: 'error',
+                            text: err.response.data.error
                         });
                         resetNotif();
                     });

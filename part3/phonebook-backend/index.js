@@ -76,13 +76,13 @@ app.post('/api/persons', (req, resp, next) => {
         .catch(err => next(err));
 });
 
-app.put('/api/persons/:id', (req, resp) => {
+app.put('/api/persons/:id', (req, resp, next) => {
     const { name, number } = req.body;
     const phone = {
         name,
         number
     };
-    Phone.findByIdAndUpdate(req.params.id, phone, { new: true })
+    Phone.findByIdAndUpdate(req.params.id, phone, { new: true, runValidators: true })
         .then(result => resp.json(result))
         .catch(err => next(err));
 });

@@ -1,4 +1,5 @@
 const mongo = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const url = process.env.MONGODB_URI;
 
@@ -12,10 +13,22 @@ mongo.connect(url, {
 .catch(err => console.log('error connecting to MongoDB:', err.message));
 
 const phoneSchema = new mongo.Schema({
-    name: String,
-    number: String,
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+        minlength: 3
+    },
+    number: {
+        type: String,
+        required: true,
+        unique: true,
+        minlength: 8
+    },
     date: Date
 });
+
+phoneSchema.plugin(uniqueValidator);
 
 phoneSchema.set('toJSON', {
     transform: (doc, returnObj) => {
