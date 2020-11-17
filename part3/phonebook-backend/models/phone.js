@@ -9,8 +9,8 @@ mongo.connect(url, {
     useFindAndModify: false,
     useCreateIndex: true,
 })
-.then(resp => console.log('connected to MongoDB'))
-.catch(err => console.log('error connecting to MongoDB:', err.message));
+    .then(() => console.log('connected to MongoDB'))
+    .catch(err => console.log('error connecting to MongoDB:', err.message));
 
 const phoneSchema = new mongo.Schema({
     name: {

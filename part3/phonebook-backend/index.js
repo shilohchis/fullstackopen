@@ -23,9 +23,9 @@ const unknownEndpoint = (req, resp) => {
 
 const errorHandler = (err, request, response, next) => {
     console.log(err.message);
-    if(err.name == 'CastError') {
+    if(err.name === 'CastError') {
         response.status(400).send({ error: 'malformatted id' });
-    } else if(err.name == 'ValidationError') {
+    } else if(err.name === 'ValidationError') {
         response.status(400).send({ error: err.message });
     }
     next(err);
@@ -42,7 +42,7 @@ app.use( morgan(':method :url :status :res[content-length] - :response-time ms :
 app.use( express.static('build') );
 
 app.get('/', (req, resp) => {
-    response.send('<h1>Hello World!</h1>');
+    resp.send('<h1>Hello World!</h1>');
 });
 
 app.get('/api/persons', (req, resp) => {
@@ -55,7 +55,7 @@ app.get('/api/persons/:id', (req, resp) => {
     Phone.findById(req.params.id)
         .then(res => {
             return resp.json(res);
-    });
+        });
 });
 
 app.delete('/api/persons/:id', (req, resp) => {

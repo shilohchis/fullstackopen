@@ -10,7 +10,8 @@ const requestLogger = (request, response, next) => {
     console.log('Body:  ', request.body);
     console.log('---');
     next();
-}
+};
+
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' });
 };
@@ -53,7 +54,7 @@ app.get('/api/notes/:id', (request, response, next) => {
         })
         .catch(err => {
             next(err);
-    });
+        });
 });
 
 app.delete('/api/notes/:id', (request, response) => {
@@ -62,7 +63,7 @@ app.delete('/api/notes/:id', (request, response) => {
             response.status(204).end();
         })
         .catch(err => next(err));
-})
+});
 
 app.put('/api/notes/:id', (request, response) => {
     const body = request.body;
@@ -97,7 +98,7 @@ app.post('/api/notes', (request, response, next) => {
         .then(newNote => newNote.toJSON())
         .then(formattedNote => response.json(formattedNote))
         .catch(err => next(err));
-})
+});
 
 app.use(unknownEndpoint);
 app.use(errorHandler);

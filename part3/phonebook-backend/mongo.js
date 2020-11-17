@@ -24,7 +24,7 @@ const phoneSchema = new mongo.Schema({
 
 const Phone = mongo.model('Phone', phoneSchema);
 
-if(process.argv.length == 6) {
+if(process.argv.length === 6) {
     const phone = new Phone({
         name: process.argv[4],
         number: process.argv[5]
@@ -36,7 +36,7 @@ if(process.argv.length == 6) {
     });
 }
 
-if(process.argv.length == 4) {
+if(process.argv.length === 4) {
     Phone.find({}).then(res => {
         console.log('phonebook:');
         res.forEach(item => {

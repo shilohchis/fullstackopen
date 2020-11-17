@@ -10,8 +10,8 @@ mongo.connect(url, {
     useUnifiedTopology: false,
     useFindAndModify: false
 })
-.then(res => console.log('connected to MongoDB'))
-.catch(err => console.log('error connecting to MongoDB:', err.message));
+    .then(res => console.log('connected to MongoDB'))
+    .catch(err => console.log('error connecting to MongoDB:', err.message));
 
 const noteSchema = mongo.Schema({
     content: {
