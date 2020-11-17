@@ -123,6 +123,10 @@ const App = () => {
         phonebook.del(id)
             .then(resp => {
                 setPersons( persons.filter(obj => obj.id != id) );
+                setNotif({
+                    type: 'success',
+                    text: `Success remove information of ${obj.name}`
+                });
             })
             .catch(err => {
                 setNotif({
